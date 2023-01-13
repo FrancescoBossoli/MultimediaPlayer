@@ -10,150 +10,148 @@ import abstracts.*;
 
 public class Reader {
 	
-	private static final String RED_TXT = "\u001B[31m";
-	private static final String RESET_TXT = "\u001B[0m";
+	private static final String dangerText = "\u001B[31m";
+	private static final String resetText = "\u001B[0m";
 	
 	//starter
-	public static void scannerStart() {
+	public static void mainMenu() {
 		Scanner in = new Scanner(System.in);
-		System.out.println("------------------");
+		System.out.println("---------------------------------------");
 
 		System.out.println(
-				"Make a new media file: \n" 
-				+ "1. Create image \n" 
-				+ "2. Create audio \n"
-				+ "3. Create video \n" 
-				+ "0. Show/play media \n"
-				);
+				"Inserisci un nuovo Elemento Multimediale: \n" 
+				+ "1. Inserisci Immagine \n" 
+				+ "2. Inserisci Registrazione Audio \n"
+				+ "3. Inserisci Video \n" 
+				+ "0. Mostra/Riproduci Elementi \n");
 
-		int action = Integer.parseInt(in.nextLine());
+		int selection = in.nextInt();
 
-		switch (action) {
+		switch (selection) {
 		case 1:
-			newImgScanner();
+			addImage();
 			break;
 		case 2:
-			newAudioScanner();
+			addAudioRecording();
 			break;
 		case 3:
-			newVideoScanner();
+			addVideo();
 			break;
 		case 0:
-			actionsScanner();
+			displayOptions();
 			break;
 		default:
-			System.out.println(RED_TXT + "NOT A VALID NUMBER" + RESET_TXT);
-			System.out.println("------------------");
-			scannerStart();
+			System.out.println(dangerText + "È stata selezionata un'opzione non valida" + resetText);
+			System.out.println("---------------------------------------");
+			mainMenu();
 			break;
 		}
 
 		in.close();
 	} 
 
-	//img creation
-	private static void newImgScanner() {
+
+	private static void addImage() {
 		
-		Scanner imgSc = new Scanner(System.in);
-		System.out.println("Write the image title: ");
-		String title = imgSc.nextLine();
+		Scanner imageReader = new Scanner(System.in);
+		System.out.println("Inserisci un titolo per l'immagine: ");
+		String title = imageReader.nextLine();
 		
 		Image img = new Image(title);
 		
 		if(title.length() == 0) {
-			System.out.println(RED_TXT + "Error: BE CREATIVE, WE NEED A TITLE" + RESET_TXT);
-			newImgScanner();
+			System.out.println(dangerText + "Inserisci un titolo valido" + resetText);
+			addImage();
 		}
 		
-		addIfArrOk(MediaPlayer.media, img);
+		addToList(MediaPlayer.media, img);
 		
-		System.out.println("--> Created img: " + img);
-		System.out.println("------------------");
-		scannerStart();
-		imgSc.close();
+		System.out.println("--> Immagine inserita con successo: " + img);
+		System.out.println("---------------------------------------");
+		mainMenu();
+		imageReader.close();
 	}
-	
-	//audio creation
-	private static void newAudioScanner() {
+
+
+	private static void addAudioRecording() {
 		
-		Scanner audioSc = new Scanner(System.in);
+		Scanner audioRecordingReader = new Scanner(System.in);
 		
-		System.out.println("Write the audio title: ");
-		String audioTitle = audioSc.nextLine();
+		System.out.println("Inserisci un titolo per la registrazione audio: ");
+		String audioTitle = audioRecordingReader.nextLine();
 		
 		if(audioTitle.length() == 0) {
-			System.out.println(RED_TXT + "Error: BE CREATIVE, WE NEED A TITLE" + RESET_TXT);
-			newAudioScanner();
+			System.out.println(dangerText + "Inserisci un titolo valido" + resetText);
+			addAudioRecording();
 		}
 		
-		System.out.println("Write the duration of the audio: ");
-		int duration = Integer.parseInt(audioSc.nextLine());
+		System.out.println("Inserisci la durata dell'audio: ");
+		int duration = audioRecordingReader.nextInt();
 		
 		AudioRecording aud = new AudioRecording(audioTitle, duration);
-		addIfArrOk(MediaPlayer.media, aud);
+		addToList(MediaPlayer.media, aud);
 		
-		System.out.println("--> Created audio: " + aud);
-		System.out.println("------------------");
-		scannerStart();
+		System.out.println("--> Registrazione Audio inserita con successo: " + aud);
+		System.out.println("---------------------------------------");
+		mainMenu();
 		
-		audioSc.close();
+		audioRecordingReader.close();
 	}
-	
-	//video creation
-	private static void newVideoScanner() {
 
-		Scanner videoSc = new Scanner(System.in);
 
-		System.out.println("Write the video title: ");
-		String vidTitle = videoSc.nextLine();
+	private static void addVideo() {
+
+		Scanner videoReader = new Scanner(System.in);
+
+		System.out.println("Inserisci un titolo per il video: ");
+		String vidTitle = videoReader.nextLine();
 		
 		if(vidTitle.length() == 0) {
-			System.out.println(RED_TXT + "Error: BE CREATIVE, WE NEED A TITLE" + RESET_TXT);
-			newVideoScanner();
+			System.out.println(dangerText + "Inserisci un titolo valido" + resetText);
+			addVideo();
 		}
 
-		System.out.println("Write the duration of the video: ");
-		int duration = Integer.parseInt(videoSc.nextLine());
+		System.out.println("Inserisci la durata del video: ");
+		int duration = videoReader.nextInt();
 
 		Video vid = new Video(vidTitle, duration);
-		addIfArrOk(MediaPlayer.media, vid);
+		addToList(MediaPlayer.media, vid);
 
-		System.out.println("--> Created video: " + vid);
-		System.out.println("------------------");
-		scannerStart();
+		System.out.println("--> Video inserito con successo: " + vid);
+		System.out.println("---------------------------------------");
+		mainMenu();
 
-		videoSc.close();
-
+		videoReader.close();
 	}
 
-	//global actions
-	private static void actionsScanner() {
+
+	private static void displayOptions() {
 		
 		ArrayList<MultimediaElement> medias = MediaPlayer.media;
 		
 		Scanner show = new Scanner(System.in);
-		System.out.println("------------------");
-		System.out.println("Wich media you want to show?");
+		System.out.println("---------------------------------------");
+		System.out.println("Quale elemento vuoi visualizzare/riprodurre?");
 		
 		int i = 1;
 		for(MultimediaElement file : medias) {
 			System.out.println(i + ". " + file.title);
 			i++;
 		}
-		System.out.println("0. Back to start");
+		System.out.println("0. Torna indietro");
 		
-		int mediaNum = Integer.parseInt(show.nextLine());
+		int mediaNum = show.nextInt();
 		
 		switch(mediaNum) {
 		case 1:
 			MultimediaElement case1 = medias.get(0);
 			
 			if( case1 instanceof Video ) {
-				vidActions(case1);
+				menuVideo(case1);
 			}else if(case1 instanceof AudioRecording){
-				audActions(case1);
+				menuAudio(case1);
 			}else {
-				imgActions(case1);
+				menuImage(case1);
 			}
 			break;
 			
@@ -161,11 +159,11 @@ public class Reader {
 			MultimediaElement case2 = medias.get(1);
 
 			if( case2 instanceof Video ) {
-				vidActions(case2);
+				menuVideo(case2);
 			}else if(case2 instanceof AudioRecording){
-				audActions(case2);
+				menuAudio(case2);
 			}else {
-				imgActions(case2);
+				menuImage(case2);
 			}
 			break;
 			
@@ -173,11 +171,11 @@ public class Reader {
 			MultimediaElement case3 = medias.get(2);
 
 			if( case3 instanceof Video ) {
-				vidActions(case3);
+				menuVideo(case3);
 			}else if(case3 instanceof AudioRecording){
-				audActions(case3);
+				menuAudio(case3);
 			}else {
-				imgActions(case3);
+				menuImage(case3);
 			}
 			break;
 			
@@ -185,11 +183,11 @@ public class Reader {
 			MultimediaElement case4 = medias.get(3);
 
 			if( case4 instanceof Video ) {
-				vidActions(case4);
+				menuVideo(case4);
 			}else if(case4 instanceof AudioRecording){
-				audActions(case4);
+				menuAudio(case4);
 			}else {
-				imgActions(case4);
+				menuImage(case4);
 			}
 			break;
 			
@@ -197,188 +195,186 @@ public class Reader {
 			MultimediaElement case5 = medias.get(4);
 
 			if( case5 instanceof Video ) {
-				vidActions(case5);
+				menuVideo(case5);
 			}else if(case5 instanceof AudioRecording){
-				audActions(case5);
+				menuAudio(case5);
 			}else {
-				imgActions(case5);
+				menuImage(case5);
 			}
 			break;
 			
 		case 0:
-			scannerStart();
+			mainMenu();
 			break;
 			
 		default:
-			System.out.println(RED_TXT + "NOT A VALID NUMBER" + RESET_TXT);
-			System.out.println("------------------");
-			actionsScanner();
+			System.out.println(dangerText + "Non è una scelta valida" + resetText);
+			System.out.println("---------------------------------------");
+			displayOptions();
 			break;
 		}
 		
 		show.close();
 	}
 	
-	//actions fot Image media
-	private static void imgActions(MultimediaElement m) {
-		Scanner imgAct = new Scanner(System.in);
+	//actions for Image media
+	private static void menuImage(MultimediaElement m) {
+		Scanner imagePreference = new Scanner(System.in);
 		
-		System.out.println("----------------");
+		System.out.println("---------------------------------------");
 		
 		System.out.println("-> " + m.title + " <-");
 		
 		System.out.println(
-				"1. Enhance brightness \n" + 
-				"2. Lower Brightness \n" + 
-				"3. Play \n" +
-				"0. Back to list"
-		);
+				"1. Aumenta la luminosità \n" + 
+				"2. Diminuisci la luminosità \n" + 
+				"3. Mostra \n" +
+				"0. Torna alla lista");
 		
-		int action = Integer.parseInt(imgAct.nextLine());
-		switch(action) {
+		int selection = imagePreference.nextInt();
+		switch(selection) {
 		
-		case 1: //brightnes +
+		case 1: // Luminosità +
 			((Image)m).brightnessUp();
-			actionsScanner();
+			displayOptions();
 			break;
 		
-		case 2: //brightness -
+		case 2: // Luminosità -
 			((Image)m).brightnessDown();
-			actionsScanner();
+			displayOptions();
 			break;
 		
-		case 3: //show img
+		case 3: // Mostra
 			((Image)m).show();
-			actionsScanner();
+			displayOptions();
 			break;
+			
 		case 0:
-			actionsScanner();
+			displayOptions();
 			break;
+			
 		default:
-			System.out.println(RED_TXT + "INPUT NOT ACCEPTED" + RESET_TXT);
-			actionsScanner();
+			System.out.println(dangerText + "Non è una scelta valida" + resetText);
+			displayOptions();
 			break;
 		}
 		
-		imgAct.close();
+		imagePreference.close();
 	}
 
-	//actions fot Audio media
-	private static void audActions(MultimediaElement m) {
-		Scanner audAct = new Scanner(System.in);
+	
+	private static void menuAudio(MultimediaElement m) {
+		Scanner audioPreference = new Scanner(System.in);
 
-		System.out.println("----------------");
+		System.out.println("---------------------------------------");
 		
 		System.out.println("-> " + m.title + " <-");
 
 		System.out.println(
-				"1. Enhance volume \n" + 
-				"2. Lower volume \n" + 
-				"3. Play \n" +
-				"0. Back to list"
-		);
+				"1. Aumenta il volume \n" + 
+				"2. Riduci il volume \n" + 
+				"3. Riproduci \n" +
+				"0. Torna alla lista");
 		
-		int action = Integer.parseInt(audAct.nextLine());
-		switch(action) {
+		int selection = audioPreference.nextInt();
+		switch(selection) {
 		
-		case 1: //volume +
+		case 1: // Volume +
 			((AudioRecording)m).volumeUp();
-			actionsScanner();
+			displayOptions();
 			break;
 		
-		case 2: //volume -
+		case 2: // Volume -
 			((AudioRecording)m).volumeDown();
-			actionsScanner();
+			displayOptions();
 			break;
 		
-		case 3: //show audio
+		case 3: // Play
 			((AudioRecording)m).play();
-			actionsScanner();
+			displayOptions();
 			break;
+			
 		case 0:
-			actionsScanner();
+			displayOptions();
 			break;
+			
 		default:
-			System.out.println(RED_TXT + "INPUT NOT ACCEPTED" + RESET_TXT);
-			actionsScanner();
+			System.out.println(dangerText + "Non è una scelta valida" + resetText);
+			displayOptions();
 			break;
 		}
 		
 		
-		audAct.close();
+		audioPreference.close();
 	}
 
-	//actions fot Video media
-	private static void vidActions(MultimediaElement m) {
-		
-		Scanner vidAct = new Scanner(System.in);
 
-		System.out.println("----------------");
+	private static void menuVideo(MultimediaElement m) {
+		
+		Scanner videoPreference = new Scanner(System.in);
+
+		System.out.println("---------------------------------------");
 		
 		System.out.println("-> " + m.title + " <-");
 		
 		System.out.println(
-				"1. Enhance brightness \n" + 
-				"2. Lower Brightness \n" + 
-				"3. Enhance volume \n" + 
-				"4. Lower volume \n" +
-				"5. Play \n" +
-				"0. Back to list"
-		);
+				"1. Aumenta la luminosità \n" + 
+				"2. Riduci la luminosità \n" + 
+				"3. Aumenta il volume \n" + 
+				"4. Riduci il volume \n" +
+				"5. Riproduci \n" +
+				"0. Torna alla lista");
 		
-		int action = Integer.parseInt(vidAct.nextLine());
+		int selection = Integer.parseInt(videoPreference.nextLine());
 
-		switch (action) {
+		switch (selection) {
 
-		case 1: //brightnes +
+		case 1: // Luminosità +
 			((Video)m).brightnessUp();
-			actionsScanner();
+			displayOptions();
 			break;
 			
-		case 2: //brightness -
+		case 2: // Luminosità -
 			((Video)m).brightnessDown();
-			actionsScanner();
+			displayOptions();
 			break;
 			
-		case 3: // volume +
+		case 3: // Volume +
 			((Video) m).volumeUp();
-			actionsScanner();
+			displayOptions();
 			break;
 
-		case 4: // volume -
+		case 4: // Volume -
 			((Video) m).volumeDown();
-			actionsScanner();
+			displayOptions();
 			break;
 
-		case 5: // show audio
+		case 5: // Play
 			((Video) m).play();
-			actionsScanner();
+			displayOptions();
 			break;
+			
 		case 0:
-			actionsScanner();
+			displayOptions();
 			break;
+			
 		default:
-			System.out.println(RED_TXT + "INPUT NOT ACCEPTED" + RESET_TXT);
-			actionsScanner();
+			System.out.println(dangerText + "Non è una scelta valida" + resetText);
+			displayOptions();
 			break;
 		}
 
-		vidAct.close();
+		videoPreference.close();
 	}
 	
-	/*
-	 * addIfArrOk(ArrayList<Media> arr, Media m)
-	 * checks the size of the array, if its 5 then takes out
-	 * the first element, shift everuthing to the left and then
-	 * add the new elemetn to the end
-	 */
-	private static void addIfArrOk(ArrayList<MultimediaElement> arr, MultimediaElement m) {
+	// Check su lunghezza lista e sostituzione eventuale elemento più vecchio
+	private static void addToList(ArrayList<MultimediaElement> array, MultimediaElement m) {
 		
-		if(arr.size() < 5) {
-			arr.add(m);
+		if(array.size() < 5) {
+			array.add(m);
 		}else {
-			arr.remove(0);
-			arr.add(m);
+			array.remove(0);
+			array.add(m);
 		}
 	}
 }

@@ -9,6 +9,6 @@ public class MediaPlayer {
 
 	public static void main(String[] args) {			
 
-		Reader.scannerStart();
+		Reader.mainMenu();
 	}	
 }
