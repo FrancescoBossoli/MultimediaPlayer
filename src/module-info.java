@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author MizNK
+ *
+ */
+module MultimediaPlayer {
+}

@@ -1,0 +1,1 @@
+INDEX VERSION 1.131+C:\Users\MizNK\Documents\Github\MultimediaPlayer\.metadata\.plugins\org.eclipse.jdt.core
