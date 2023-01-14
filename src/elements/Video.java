@@ -35,11 +35,4 @@ public class Video extends PlayableElement implements Brightness {
 		}
 		System.out.println("Luminosità Impostata: " + brightness*10 + "%");
 	}
-	
-	public static void main(String[] args) {
-		Video a = new Video("Welcome to the Jungle", 5);
-		a.play();
-	}
-	
-
 }
